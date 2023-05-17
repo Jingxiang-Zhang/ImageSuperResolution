@@ -24,8 +24,7 @@ factor influences the pre-upsampling model.
 
 **Model:** SRCNN, FSRCNN, ESPCN, VDSR, SRGAN, EDSR, DCSCN, SUBCNN, Per. SRGAN
 
-click [here](EE541-final project report.pdf) to view the whole paper.
-
+click [here](https://github.com/Jingxiang-Zhang/ImageSuperResolution/blob/main/EE541-final%20project%20report.pdf) to view the whole paper.
 
 
 #### Introduction of this folder:
