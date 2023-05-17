@@ -114,15 +114,15 @@ A patch size equal to 32 is also a good choice, but the smaller the patch size, 
 to train. When the patch size is larger than 64, the larger the patch size, the worse the performance
 is.
 
-![training process for different batch size](demonstration/1.1.png){:data-align="center"}
+![training process for different batch size](demonstration/1.1.png)
 
 However, one should notice that for a smaller patch size, it has more iterations for each epoch, i.e., the data input into the model at each iteration is different. The smaller patch size has the advantage that it can train more iterations for each epoch. To make sure that the data size input into the model has the same size, we design another group of training. For patch sizes equal to 32, 64, 128, and 256, we use the batch size = 1024, 256, 64, 16. This time, the input data have the same size, and the iteration for each epoch are close to each other (because we pad the image when cutting, the larger the sub-image, the larger blank will be padding, therefore the iteration here will not equal).
 
-![training process for the same data size](demonstration/1.2.png){:data-align="center"}
+![training process for the same data size](demonstration/1.2.png)
 
 The figure above shows that even if we keep the same input data size, a patch size equal to 32 or 64 still gets the best performance, and also, the larger the patch size, the worse the performance. The table below shows the final test performance on the validation set.
 
-![ESPCN model with the different batch size and patch size](demonstration/1.3.png){:data-align="center"}
+![ESPCN model with the different batch size and patch size](demonstration/1.3.png)
 
 Conclusion for this part: Table 3 shows that, when batch size equals 16, and patch size equals 64, the model will get the best performance. However, one should notice that it will spend more time to train more iterations. The training time between all these batch sizes and patch size settings maybe varies model by model. Given the same training time id = 2 spend, id = 6 can train more epochs, and performance may finally exceed id = 2.
 
@@ -140,19 +140,19 @@ For the second model, we will train the RGB channel together, the input channel 
 
 For the third model, we will train the R, G, and B channel separately, each model train only one channel, and calculate PSNR on its own channel. Finally, we take the average PSNR as the model performance.
 
-![Formula of PSNR calculation for RGB channel](demonstration/2.1.png){:data-align="center"}
+![Formula of PSNR calculation for RGB channel](demonstration/2.1.png)
 
 However, the real RGB channel PSNR should be calculated in the next formula. But the arithmetic mean and the geometric mean of MSER + MSEG + MSEB are very close in this case. We use the previous formula as PSNR performance.
 
-![Formula of PSNR calculation for RGB channel 2](demonstration/2.2.png){:data-align="center"}
+![Formula of PSNR calculation for RGB channel 2](demonstration/2.2.png)
 
-![training process for different channels](demonstration/2.3.png){:data-align="center"}
+![training process for different channels](demonstration/2.3.png)
 
 The figure above shows the training curve for the ESPCN model using different training channels. Y channel stands for the model training on the Y channel, and the PSNR is for Y channel compar- ison, while Y channel BGR stands for the model training on the Y channel, and the PSNR is for RGB channel comparison (here we use BGR because OpenCV read the image by BGR channel). BGR channel stand for the model training on RGB channel together, and B G R Ave stand for the average PSNR for 3 models training on R, G, and B channel separately.
 
 From this figure, we can find that the worst model is training on the BGR channel together. While training on B, G, and R separately is only slightly better than training on the Y channel only (compare to the PSNR on the BGR channel). Given enough epochs, they may finally reach the same performance. However, training three models will spend more time. Therefore, training the Y channel only is very reasonable.
 
-![Model Performance for Training Different Channels](demonstration/2.4.png){:data-align="center"}
+![Model Performance for Training Different Channels](demonstration/2.4.png)
 
 The figure above show the performance on the test image. All the models are better than the Bicubic one. According to this figure, it is difficult to tell the difference between these three models. However, one can spot that all three images below have ripples around the black line. Since ESPCN uses a convolutional layer, like many filters, the black color in the black line will influence the surrounding area, that’s why there are ripples around the black line.
 
@@ -168,9 +168,9 @@ Dong et al. compare the PSNR and SSIM pair by pair, which means, use SRCNN X2 to
 
 The other application of this part is that suppose we have an SRCNN X2 pre-upsampling model, and we want to upscale an image by 3 times, can we use this model? Or shall we need to train a new SRCNN X3 model? If the SRCNN X2 model performs approximately equal to SRCNN X3 on Data X3, then we don’t need to train a new one.
 
-![PSNR for Pre-upsampling Model with Different Scale Factor](demonstration/3.1.png){:data-align="center"}
+![PSNR for Pre-upsampling Model with Different Scale Factor](demonstration/3.1.png)
 
-![SSIM for Pre-upsampling Model with Different Scale Factor](demonstration/3.2.png){:data-align="center"}
+![SSIM for Pre-upsampling Model with Different Scale Factor](demonstration/3.2.png)
 
 The two figures above shows the PSNR and SSIM for different scale datasets and models. Compare SR- CNN X2 and SRCNN X3 model, we can find that SRCNN X2 outperform SRCNN X3 in Data X2, and SRCNN X3 slightly outperform SRCNN X2 in Data X3, which mean we don’t need to train a new model for X3 images if we have SRCNN X2. And SRCNN X3 also outperform SRCNN X2 in Data X4 and Data X5, which meet our expectation since SRCNN X3 is more fitful to map a more vague image into the high-resolution image.
 
